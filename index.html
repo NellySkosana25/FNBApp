@@ -1,27 +1,51 @@
 <!DOCTYPE html>
 <html>
     <head>
-		<link rel="stylesheet" href ="style.css" >
+        <meta charset="utf-8">
+        <title></title>
     </head>
-        <body>
-            <h1>Home Page</h1>
-            <h2>This is a heading</h2>
-             <h3>This is a heading</h3>
-             <h4>This is a heading</h4>
-             <h5>This is a heading</h5>
-             <h1>This is a heading</h1>
-            <p>Hello everyone</p>
-            <p> My first website</p>
-            <p>Setting image width and height</p>
-            <img src="images/image%201.jpg"
-                 width="150"/>
-           <img src="images/image%202.jpg"
-                 width="150"/>
-            <a href="boat.html"><img src="images/image%203.jpg"
-                    width="150"/></a>
+    <body onload="fetchContacts()">
+        
+        <div id="table">Contacts loading...</div>
+        <button id="refresh" type="button">Refresh</button>
+        <button id="addContact" type="button">Add Contact</button>
+    
+        <script src="config.js"></script>
+        <script>
+            document.getElementById("refresh").addEventListener('click', fetchContacts);
+            document.getElementById("addContact").addEventListener('click', addContact);
             
-            <a href="http://www.google.com">Click here to go to google </a>
-            <a href="http://compukids.me/">Click here to go to link</a>
-            <a href="about.html">Click here to go to About Us</a>
-        </body>
+        function fetchContacts(){
+            fetch(rootPath + "controller/get-contacts/")
+            .then(function(response){
+                return response.json();
+            })
+            .then(function(data){
+                displayOutput(data);
+                //console.log(data);
+            })
+        }
+            
+        function displayOutput(data){
+            output = "<table>";
+            
+            for(a in data){
+                output += `
+                    <tr>
+                        <td><img src="${rootPath}controller/uploads/${data[a].avatar}" width="40"/></td>
+                        <td><h5>${data[a].firstname}</h5></td>
+                        <td><h5>${data[a].lastname}</h5></td>
+                    </tr>
+
+                    `
+            }
+            output += "</table>";
+            document.getElementById("table").innerHTML = output;
+        }
+            
+        function addContact(){
+            window.open("add-contact.html", "_self");
+        }
+        </script>
+    </body>
 </html>
